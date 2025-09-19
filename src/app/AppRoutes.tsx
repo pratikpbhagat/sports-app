@@ -6,6 +6,8 @@ import { MenuItems } from "@/config/MenuItems";
 import type { MenuItem } from "@/types/menuItem";
 import ProfilePage from "@/pages/ProfilePage";
 import TeamPage from "@/pages/TeamPage";
+import BillingPage from "@/pages/BillingPage";
+import NotificationsPage from "@/pages/NotificationsPage";
 
 export default function AppRoutes() {
     // Memoize menu items so lazy components aren't re-created on every render
@@ -50,6 +52,14 @@ export default function AppRoutes() {
                     }
                 />
                 <Route
+                    path="/billing"
+                    element={
+                        <Suspense fallback={<div className="p-4">Loading profile…</div>}>
+                            <BillingPage />
+                        </Suspense>
+                    }
+                />
+                <Route
                     path="/team"
                     element={
                         <Suspense fallback={<div className="p-4">Loading profile…</div>}>
@@ -57,9 +67,15 @@ export default function AppRoutes() {
                         </Suspense>
                     }
                 />
+                <Route
+                    path="/notifications"
+                    element={
+                        <Suspense fallback={<div className="p-4">Loading profile…</div>}>
+                            <NotificationsPage />
+                        </Suspense>
+                    }
+                />
             </Route>
-
-
         </Routes>
     );
 }

@@ -21,23 +21,25 @@ export default function Header({ unreadCount = 3 }: HeaderProps) {
     <header className="shadow-md px-6 py-3 flex justify-end items-center bg-transparent">
       <div className="flex items-center gap-3">
         {/* Notifications button — numeric badge */}
-        <button
-          type="button"
-          aria-label={`Notifications, ${unreadCount} unread`}
-          className="relative p-2 rounded-md text-gray hover:bg-white/5 transition focus:outline-none focus:ring-2 focus:ring-white/10"
-        >
-          <Bell className="w-5 h-5" />
+        <Link to="/notifications" className="w-full block">
+          <button
+            type="button"
+            aria-label={`Notifications, ${unreadCount} unread`}
+            className="relative p-2 rounded-md text-gray hover:bg-white/5 transition focus:outline-none focus:ring-2 focus:ring-white/10"
+          >
+            <Bell className="w-5 h-5" />
 
-          {unreadCount > 0 && (
-            <span
-              aria-hidden={false}
-              role="status"
-              className="absolute -top-1 -right-1 min-w-[1.25rem] px-1.5 py-[0.125rem] text-xs font-semibold leading-none rounded-full bg-[#22c55e] text-white flex items-center justify-center"
-            >
-              {displayCount}
-            </span>
-          )}
-        </button>
+            {unreadCount > 0 && (
+              <span
+                aria-hidden={false}
+                role="status"
+                className="absolute -top-1 -right-1 min-w-[1.25rem] px-1.5 py-[0.125rem] text-xs font-semibold leading-none rounded-full bg-[#22c55e] text-white flex items-center justify-center"
+              >
+                {displayCount}
+              </span>
+            )}
+          </button>
+        </Link>
 
         <DropdownMenu>
           <DropdownMenuTrigger
