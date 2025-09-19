@@ -6,8 +6,9 @@ const TournamentsPage = lazy(() => import("@/pages/TournamentsPage"));
 const TrainingsPage = lazy(() => import("@/pages/TrainingsPage"));
 const TournamentHistoryPage = lazy(() => import("@/pages/TournamentHistoryPage"));
 const TrainingsHistoryPage = lazy(() => import("@/pages/TrainingsHistoryPage"));
-const SubscriptionPage = lazy(()=>import("@/pages/SubscriptionPage"))
-
+const SubscriptionPage = lazy(()=>import("@/pages/SubscriptionPage"));
+const TeamPage = lazy(()=>import("@/pages/TeamPage"))
+;
 export const MenuItems = (): MenuItem[] => {
     return [
         {
