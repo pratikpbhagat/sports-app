@@ -69,18 +69,6 @@ export default function TeamPage() {
     // TODO: delete on backend
   }
 
-  function handleAddDirect(payload: { name?: string; email: string; role: MemberRole }) {
-    // If you want to add directly (no invite), set invited: false
-    const newMember: Member = {
-      id: `m_${Date.now()}`,
-      name: payload.name,
-      email: payload.email,
-      role: payload.role,
-      invited: false,
-    };
-    setMembers((p) => [newMember, ...p]);
-  }
-
   return (
     <main className="min-h-screen p-6 bg-slate-50">
       <header className="mb-6 flex items-start justify-between gap-4">

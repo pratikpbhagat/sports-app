@@ -68,6 +68,8 @@ export function useTournamentHistory(userId?: string) {
   const playerHistory = useMemo(() => participations.filter((p) => p.role === "player"), [participations]);
   const organizerHistory = useMemo(() => organized, [organized]);
 
+  console.log(userId);
+
   // quick aggregated stats for organizer
   const organizerStats = useMemo(() => {
     // mock totals — in real life compute from tournaments API

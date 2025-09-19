@@ -87,6 +87,8 @@ export function useTrainingHistory(userId?: string) {
   const recentPlayer = useMemo(() => playerHistory.slice(0, 20), [playerHistory]);
   const recentCoach = useMemo(() => coachHistory.slice(0, 20), [coachHistory]);
 
+  console.log(userId);
+
   // quick stats for coach view
   const coachStats = useMemo(() => {
     const total = recentCoach.length;

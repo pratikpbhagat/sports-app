@@ -69,6 +69,7 @@ export default function SubscriptionPage() {
 
   function handleSubscribe(plan: Plan, cycle: BillingCycle) {
     // open confirm dialog (parent-level) with plan info
+    console.log(cycle);
     setOpenConfirmPlan(plan);
     // In a full app you'd set dialog open state; here we store plan and render dialog
   }

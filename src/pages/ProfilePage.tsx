@@ -42,6 +42,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
 
   const onSelectFile = useCallback((file?: File) => {
+    console.log(avatarFile);
     if (!file) {
       setAvatarPreview(null);
       setAvatarFile(null);
