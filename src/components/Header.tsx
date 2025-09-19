@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type HeaderProps = {
   unreadCount?: number;
@@ -22,10 +23,11 @@ export default function Header({ unreadCount = 3 }: HeaderProps) {
       <div className="flex items-center gap-3">
         {/* Notifications button — numeric badge */}
         <Link to="/notifications" className="w-full block">
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon"
             aria-label={`Notifications, ${unreadCount} unread`}
-            className="relative p-2 rounded-md text-gray hover:bg-white/5 transition focus:outline-none focus:ring-2 focus:ring-white/10"
+            className="relative cursor-pointer rounded-md hover:bg-white/5 transition focus:outline-none focus:ring-2 focus:ring-white/10"
           >
             <Bell className="w-5 h-5" />
 
@@ -38,7 +40,7 @@ export default function Header({ unreadCount = 3 }: HeaderProps) {
                 {displayCount}
               </span>
             )}
-          </button>
+          </Button>
         </Link>
 
         <DropdownMenu>
