@@ -38,15 +38,14 @@ export default function PlanCard({ plan, cycle, selected, onSelect, onSubscribe 
         ? "Free"
         : `$${price}/mo`
       : price === 0
-      ? "Free"
-      : `$${price}/yr`;
+        ? "Free"
+        : `$${price}/yr`;
 
   return (
     <Card
       key={plan.id}
-      className={`p-0 border-0 shadow-lg ${
-        selected ? "ring-2 ring-[#7c3aed]/40" : ""
-      }`}
+      className={`p-0 border-0 shadow-lg ${selected ? "ring-2 ring-[#7c3aed]/40" : ""
+        }`}
     >
       <CardHeader className="px-6 py-4 bg-gradient-to-r from-[#ffffff05] to-[#ffffff02]">
         <div className="flex items-start justify-between gap-2">
@@ -103,7 +102,7 @@ export default function PlanCard({ plan, cycle, selected, onSelect, onSubscribe 
             {selected ? "Selected" : "Select"}
           </Button>
 
-          <Dialog open={false} onOpenChange={() => {}}>
+          <Dialog open={false} onOpenChange={() => { }}>
             <DialogTrigger asChild>
               <Button
                 className="ml-2"

@@ -42,24 +42,24 @@ export default function AppRoutes() {
                 <Route path="/" element={<Navigate to="/home" />} />
                 {renderRoutes(menuItems)}
                 <Route
-      path="/profile"
-      element={
-        <Suspense fallback={<div className="p-4">Loading profile…</div>}>
-          <ProfilePage />
-        </Suspense>
-      }
-    />
-                    <Route
-      path="/team"
-      element={
-        <Suspense fallback={<div className="p-4">Loading profile…</div>}>
-          <TeamPage />
-        </Suspense>
-      }
-    />
+                    path="/profile"
+                    element={
+                        <Suspense fallback={<div className="p-4">Loading profile…</div>}>
+                            <ProfilePage />
+                        </Suspense>
+                    }
+                />
+                <Route
+                    path="/team"
+                    element={
+                        <Suspense fallback={<div className="p-4">Loading profile…</div>}>
+                            <TeamPage />
+                        </Suspense>
+                    }
+                />
             </Route>
-            
-            
+
+
         </Routes>
     );
 }
