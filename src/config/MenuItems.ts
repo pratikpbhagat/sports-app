@@ -5,8 +5,9 @@ const HomePage = lazy(() => import("@/pages/HomePage"));
 const TournamentsPage = lazy(() => import("@/pages/TournamentsPage"));
 const TrainingsPage = lazy(() => import("@/pages/TrainingsPage"));
 const TournamentHistoryPage = lazy(() => import("@/pages/TournamentHistoryPage"));
-const TrainingsHistoryPage = lazy(() => import("@/pages/TrainingsHistoryPage"))
-;
+const TrainingsHistoryPage = lazy(() => import("@/pages/TrainingsHistoryPage"));
+const SubscriptionPage = lazy(()=>import("@/pages/SubscriptionPage"))
+
 export const MenuItems = (): MenuItem[] => {
     return [
         {
@@ -38,5 +39,10 @@ export const MenuItems = (): MenuItem[] => {
                 }
             ]
         },
+        {
+            title: "Subscriptions",
+            url: "/subscriptions",
+            component: SubscriptionPage,
+        }
     ];
 };
