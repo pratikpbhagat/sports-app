@@ -4,6 +4,9 @@ import { lazy } from "react";
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const TournamentsPage = lazy(() => import("@/pages/TournamentsPage"));
 const TrainingsPage = lazy(() => import("@/pages/TrainingsPage"));
+const TournamentHistoryPage = lazy(() => import("@/pages/TournamentHistoryPage"));
+const TrainingsHistoryPage = lazy(() => import("@/pages/TrainingsHistoryPage"));
+const SubscriptionPage = lazy(() => import("@/pages/SubscriptionPage"));
 
 export const MenuItems = (): MenuItem[] => {
     return [
@@ -16,11 +19,30 @@ export const MenuItems = (): MenuItem[] => {
             title: "Tournaments",
             url: "/tournaments",
             component: TournamentsPage,
+            children: [
+                {
+                    title: "Tournament History",
+                    url: "/tournaments/history",
+                    component: TournamentHistoryPage
+                }
+            ]
         },
         {
             title: "Trainings",
             url: "/trainings",
             component: TrainingsPage,
+            children: [
+                {
+                    title: "Training History",
+                    url: "/trainings/history",
+                    component: TrainingsHistoryPage
+                }
+            ]
         },
+        {
+            title: "Subscriptions",
+            url: "/subscriptions",
+            component: SubscriptionPage,
+        }
     ];
 };
