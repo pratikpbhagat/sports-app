@@ -9,6 +9,8 @@ import RegisterDialog from "@/features/tournaments/RegisterDialog";
 import TournamentList from "@/features/tournaments/TournamentList";
 import { useMemo, useState } from "react";
 
+import MatchFormatDialog from "@/features/tournaments/MatchFormatDialog/MatchFormatDialog";
+import type { MatchFormat } from "@/features/tournaments/types";
 import { formatDate } from "@/lib/formatDate";
 import type { Tournament } from "@/types/tournament";
 
@@ -121,6 +123,42 @@ export default function TournamentsPage() {
         if (isOrganizerView) setCreateOpen(true);
     };
 
+    // inside TournamentsPage component (top-level state)
+    const [formatOpen, setFormatOpen] = useState(false);
+    const [formatTarget, setFormatTarget] = useState<{ tournamentId: string; categoryId?: string } | null>(null);
+
+    // handler to open the dialog for a specific tournament/category
+    function handleOpenFormatDialog(tournamentId: string, categoryId?: string) {
+        setFormatTarget({ tournamentId, categoryId });
+        setFormatOpen(true);
+    }
+
+    // onSave callback to persist choice
+    function handleSaveFormat(format: MatchFormat) {
+        if (!formatTarget) return;
+        setTournaments((prev) =>
+            prev.map((t) => {
+                if (t.id !== formatTarget.tournamentId) return t;
+                const makeCategory = (catId?: string) => {
+                    if (!catId) {
+                        // apply as default format (tournament-level) — optional
+                        return t;
+                    }
+                    const categories = (t.categories || []).map((c) => (c.id === catId ? { ...c, matchFormat: format } : c));
+                    return { ...t, categories };
+                };
+
+                if (formatTarget.categoryId) return makeCategory(formatTarget.categoryId);
+                // fallback: attach to tournament as defaultFormat
+                return { ...t, defaultMatchFormat: format };
+            })
+        );
+
+        setFormatOpen(false);
+        setFormatTarget(null);
+    }
+
+
     return (
         <main className="min-h-screen p-6 bg-slate-50">
             <header className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -203,7 +241,10 @@ export default function TournamentsPage() {
                                                         {!isOrganizerView ? (
                                                             <Button size="sm" onClick={() => handleOpenRegister(t)}>Register</Button>
                                                         ) : (
-                                                            <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(t)}>Manage</Button>
+                                                            <>
+                                                                <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(t)}>Manage</Button>
+                                                                <Button size="sm" onClick={() => handleOpenFormatDialog(t.id)} >Format</Button>
+                                                            </>
                                                         )}
                                                     </div>
                                                 </td>
@@ -267,6 +308,27 @@ export default function TournamentsPage() {
                 }}
                 initialData={editTournament}
                 onUpdate={handleUpdateTournament}
+            />
+
+            <MatchFormatDialog
+                open={formatOpen}
+                onOpenChange={(v) => {
+                    setFormatOpen(v);
+                    if (!v) setFormatTarget(null);
+                }}
+                initial={
+                    // find existing format if category-specific else use tournament default
+                    (() => {
+                        if (!formatTarget) return null;
+                        const t = tournaments.find((x) => x.id === formatTarget.tournamentId);
+                        if (!t) return null;
+                        if (formatTarget.categoryId) {
+                            return t.categories?.find((c) => c.id === formatTarget.categoryId)?.matchFormat ?? null;
+                        }
+                        return (t as any).defaultMatchFormat ?? null;
+                    })()
+                }
+                onSave={handleSaveFormat}
             />
         </main>
     );

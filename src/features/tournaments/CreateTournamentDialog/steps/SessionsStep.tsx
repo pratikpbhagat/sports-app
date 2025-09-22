@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash } from "lucide-react";
-import type { SessionRow } from "../types";
+import type { SessionRow } from "../../types";
 
 type Props = {
     useMultipleDates: boolean;

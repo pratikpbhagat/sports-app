@@ -1,21 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
-import type { CategoryOption } from "../types";
+import type { Category } from "../../types";
 
 type Props = {
-    presetCategories: CategoryOption[];
-    selectedCategories: Record<string, CategoryOption>;
-    toggleCategory: (opt: CategoryOption) => void;
+    presetCategories: Category[];
+    selectedCategories: Record<string, Category>;
+    toggleCategory: (opt: Category) => void;
     addCustomCategory: (label: string) => void;
     customCategoryInput: string;
     setCustomCategoryInput: (s: string) => void;
-    updateCategoryMeta: (id: string, patch: Partial<CategoryOption>) => void;
+    updateCategoryMeta: (id: string, patch: Partial<Category>) => void;
     isTeamSelected: () => boolean;
     candidateTeamSubcategories: { id: string; label: string }[];
     getTeamId: () => string | undefined;
     toggleTeamSubcategory: (teamId: string, subcatId: string) => void;
-    selectedCategoriesArrForRender?: CategoryOption[]; // optional helper to render selected ones
+    selectedCategoriesArrForRender?: Category[]; // optional helper to render selected ones
     allowMultiCategoryRegistration: boolean;
     setAllowMultiCategoryRegistration: (v: boolean) => void;
     multiCategoryDiscountEnabled: boolean;

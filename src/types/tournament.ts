@@ -1,3 +1,5 @@
+import type { Category } from "@/features/tournaments/types";
+
 export type Tournament = {
     id: string;
     title: string;
@@ -11,4 +13,5 @@ export type Tournament = {
     organizer?: string;
     entryFee?: number;
     description?: string;
+    categories?: Category[];
 };

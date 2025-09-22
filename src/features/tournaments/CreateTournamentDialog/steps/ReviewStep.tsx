@@ -1,4 +1,4 @@
-import type { CategoryOption, Contact, SessionRow } from "../types";
+import type { Category, Contact, SessionRow } from "../../types";
 
 type Props = {
     title: string;
@@ -8,7 +8,7 @@ type Props = {
     dateTimes: SessionRow[];
     registrationStart: string;
     registrationEnd: string;
-    selectedCategories: Record<string, CategoryOption>;
+    selectedCategories: Record<string, Category>;
     allowMultiCategoryRegistration: boolean;
     multiCategoryDiscount: any;
     autoApproveRegistrations: boolean;
