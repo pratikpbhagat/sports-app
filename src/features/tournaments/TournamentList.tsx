@@ -1,7 +1,7 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { Tournament } from "@/types/tournament";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import TournamentCard from "@/features/tournaments/TournamentCard";
+import type { Tournament } from "@/types/tournament";
 
 type Props = {
     title?: string;
@@ -9,6 +9,7 @@ type Props = {
     onRegister: (t: Tournament) => void;
     isOrganizerView?: boolean;
     subtitle?: string | null;
+    onEdit?: (t: Tournament) => void;
 };
 
 /**
@@ -16,7 +17,7 @@ type Props = {
  * - Re-usable list that shows a card with a grid of TournamentCard.
  * - All cards use shadow (no border).
  */
-export default function TournamentList({ title = "Tournaments", tournaments, onRegister, isOrganizerView = false, subtitle = null }: Props) {
+export default function TournamentList({ title = "Tournaments", tournaments, onRegister, isOrganizerView = false, subtitle = null, onEdit }: Props) {
     return (
         <Card className="shadow-lg border-0">
             <CardHeader className="px-6 py-4 flex items-center justify-between bg-gradient-to-r from-[#7c3aed]/5 to-[#22c55e]/5">
@@ -37,7 +38,7 @@ export default function TournamentList({ title = "Tournaments", tournaments, onR
                 ) : (
                     <div className="grid gap-3">
                         {tournaments.map((t) => (
-                            <TournamentCard key={t.id} t={t} onRegister={onRegister} isOrganizerView={isOrganizerView} />
+                            <TournamentCard key={t.id} t={t} onRegister={onRegister} isOrganizerView={isOrganizerView} onEdit={onEdit} />
                         ))}
                     </div>
                 )}

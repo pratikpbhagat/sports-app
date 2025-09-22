@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/button";
-import type { Tournament } from "@/types/tournament";
 import { formatDate } from "@/lib/formatDate";
-
+import type { Tournament } from "@/types/tournament";
 
 export default function TournamentCard({
     t,
     onRegister,
     isOrganizerView,
+    onEdit
 }: {
     t: Tournament;
     onRegister: (t: Tournament) => void;
     isOrganizerView?: boolean;
+    onEdit?: (t: Tournament) => void;
 }) {
     const seatsLeft = (t.capacity ?? 0) - (t.registered ?? 0);
     const full = t.capacity !== undefined && seatsLeft <= 0;
@@ -58,7 +59,7 @@ export default function TournamentCard({
                         </div>
                     ) : (
                         <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" onClick={() => onEdit?.(t)}>
                                 Edit
                             </Button>
                             <Button variant="destructive" size="sm">
