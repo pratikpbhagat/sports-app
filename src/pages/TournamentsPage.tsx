@@ -1,7 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle";
-import CreateTournamentDialog from "@/features/tournaments/CreateTournamentDialog/index";
+import CreateTournamentDialog from "@/features/tournaments/CreateTournamentDialog";
 import Filters from "@/features/tournaments/Filters";
 import RegisterDialog from "@/features/tournaments/RegisterDialog";
 import TournamentList from "@/features/tournaments/TournamentList";
@@ -24,7 +26,8 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
         organizer: "Spring Paddle Club",
         entryFee: 15,
         description: "Open singles and doubles, all levels welcome.",
-    },
+        // optional fields may be added by create dialog
+    } as any,
     {
         id: "t2",
         title: "Autumn Classic",
@@ -38,7 +41,7 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
         organizer: "North Racquet Association",
         entryFee: 20,
         description: "Competitive draw, intermediate+.",
-    },
+    } as any,
     {
         id: "t3",
         title: "Weekend Fun Doubles",
@@ -51,7 +54,7 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
         organizer: "Community Sports",
         entryFee: 10,
         description: "Casual doubles — beginner friendly.",
-    },
+    } as any,
 ];
 
 export default function TournamentsPage() {
@@ -66,6 +69,10 @@ export default function TournamentsPage() {
 
     // create modal state
     const [createOpen, setCreateOpen] = useState(false);
+
+    // edit modal state
+    const [editOpen, setEditOpen] = useState(false);
+    const [editTournament, setEditTournament] = useState<Tournament | null>(null);
 
     // toggle between Player and Organizer view (false = Player, true = Organizer)
     const [isOrganizerView, setIsOrganizerView] = useState(false);
@@ -90,13 +97,23 @@ export default function TournamentsPage() {
 
     function handleConfirmRegistration(payload: { tournamentId: string; playerName: string; playerEmail?: string }) {
         setTournaments((prev) => prev.map((p) => (p.id === payload.tournamentId ? { ...p, registered: (p.registered ?? 0) + 1 } : p)));
-        // TODO: persist to backend / show toast
         console.log("registered", payload);
     }
 
     function handleCreateTournament(newT: Tournament) {
         setTournaments((prev) => [newT, ...prev]);
-        // TODO: persist
+    }
+
+    // Edit flow
+    function handleOpenEdit(t: Tournament) {
+        setEditTournament(t);
+        setEditOpen(true);
+    }
+
+    function handleUpdateTournament(updated: Tournament) {
+        setTournaments((prev) => prev.map((p) => (p.id === updated.id ? { ...p, ...updated } : p)));
+        setEditTournament(null);
+        setEditOpen(false);
     }
 
     // guarded create opener: only actually opens create dialog when organizer view is active
@@ -113,7 +130,6 @@ export default function TournamentsPage() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    {/* shadcn Toggle used here */}
                     <div className="flex items-center gap-3">
                         <div className="text-sm text-slate-400">View</div>
 
@@ -138,7 +154,6 @@ export default function TournamentsPage() {
                         selectedCity={selectedCity}
                         setSelectedCity={setSelectedCity}
                         cities={cities}
-                        // pass guarded opener so create button is only effective for organizers
                         onOpenCreate={handleOpenCreateGuarded}
                     />
                 </div>
@@ -152,6 +167,7 @@ export default function TournamentsPage() {
                         tournaments={filtered}
                         onRegister={handleOpenRegister}
                         isOrganizerView={isOrganizerView}
+                        onEdit={handleOpenEdit}
                     />
 
                     <Card className="shadow-lg border-0">
@@ -184,11 +200,10 @@ export default function TournamentsPage() {
                                                 <td className="px-4 py-3">{t.registered}/{t.capacity ?? "—"}</td>
                                                 <td className="px-4 py-3">
                                                     <div className="flex items-center gap-2">
-                                                        {/* Player action: Register. Organizer action: Manage */}
                                                         {!isOrganizerView ? (
                                                             <Button size="sm" onClick={() => handleOpenRegister(t)}>Register</Button>
                                                         ) : (
-                                                            <Button variant="ghost" size="sm">Manage</Button>
+                                                            <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(t)}>Manage</Button>
                                                         )}
                                                     </div>
                                                 </td>
@@ -240,7 +255,19 @@ export default function TournamentsPage() {
                 onConfirm={handleConfirmRegistration}
             />
 
+            {/* Create dialog (for organizers) */}
             <CreateTournamentDialog open={createOpen} setOpen={setCreateOpen} onCreate={handleCreateTournament} />
+
+            {/* Edit dialog reuses the same component and passes initialData + onUpdate */}
+            <CreateTournamentDialog
+                open={editOpen}
+                setOpen={(v) => {
+                    setEditOpen(v);
+                    if (!v) setEditTournament(null);
+                }}
+                initialData={editTournament}
+                onUpdate={handleUpdateTournament}
+            />
         </main>
     );
 }
