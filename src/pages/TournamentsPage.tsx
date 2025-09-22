@@ -1,15 +1,14 @@
-// app/(routes)/tournaments/page.tsx
-import { useMemo, useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import TournamentList from "@/features/tournaments/TournamentList";
-import Filters from "@/features/tournaments/Filters";
-import CreateTournamentDialog from "@/features/tournaments/CreateTournamentDialog";
-import RegisterDialog from "@/features/tournaments/RegisterDialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle";
+import CreateTournamentDialog from "@/features/tournaments/CreateTournamentDialog/index";
+import Filters from "@/features/tournaments/Filters";
+import RegisterDialog from "@/features/tournaments/RegisterDialog";
+import TournamentList from "@/features/tournaments/TournamentList";
+import { useMemo, useState } from "react";
 
-import type { Tournament } from "@/types/tournament";
 import { formatDate } from "@/lib/formatDate";
+import type { Tournament } from "@/types/tournament";
 
 const SAMPLE_TOURNAMENTS: Tournament[] = [
     {
