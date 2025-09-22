@@ -207,20 +207,9 @@ export default function CreateTournamentDialog({ open, setOpen, onCreate }: Prop
         return null;
     }
 
-    function next() {
-        setErrors(null);
-        const v = validateStep(step);
-        if (v) return setErrors(v);
-        setStep((p) => Math.min(4, p + 1));
-    }
-
-    function back() {
-        setErrors(null);
-        setStep((p) => Math.max(0, p - 1));
-    }
-
     async function handleClose() {
         // reset minimal fields or do as needed
+        console.log("COVER FILE", coverFile);
         setStep(0);
         setTitle("");
         setLocation("");
