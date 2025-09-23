@@ -3,13 +3,16 @@ export type CategoryOptionKind = "singles" | "doubles" | "mixed" | "split" | "op
 export type Category = {
     id: string;
     label: string;
-    kind: CategoryOptionKind;
+    kind?: CategoryOptionKind;
     ageSplit?: string | null;
     maxParticipantsPerTeam?: number | null;
     fee?: number | null;
     maxSlotsPerCategory?: number | null;
     teamSubcategories?: string[];
     matchFormat?: MatchFormat | null;
+    participants?: Participant[];
+    registered: number; // currently registered
+    capacity?: number | null; // total slots (undefined/null = unlimited)
 };
 
 export type SessionRow = { id: string; date: string; time: string };
@@ -24,10 +27,31 @@ export type MultiCategoryDiscount =
 export type MatchFormatType = "rr+ko" | "league" | "knockout" | "custom";
 
 export type MatchFormat = {
+    categoryId: string;
     type: MatchFormatType;
     pointsPerGame?: number;        // e.g. 11
     gamesPerMatch?: number;        // e.g. best of 3 -> 3
     tieBreakTo?: number | null;    // e.g. 15 for tie-break (optional)
     description?: string | null;   // for custom
+    rrPools?: number | null; // for round-robin: number of pools (optional)
+    rrQualPerPool?: number | null; // for round-robin: number qualifying per pool (optional)
     // other options later (seeding, byes, consolation, etc.)
 };
+
+/** A participant can be an individual or a team. Keep it small for now. */
+export interface Participant {
+    id: string;
+    name: string;
+    seed?: number; // optional seeding
+}
+
+/** A single pairing/match in a schedule/bracket */
+export interface Matchup {
+    id: string;
+    players: Participant[]; // 1 or 2 players (bye = single)
+    round?: number;
+    bracketPos?: number;
+    notes?: string | null;
+    status?: "scheduled" | "completed" | "pending";
+}
+
