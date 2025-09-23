@@ -2,6 +2,8 @@
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { Category, MatchFormat, MatchFormatType } from "../types";
+import EliminationConfig from "./EliminationConfig";
+import LeagueConfig from "./LeagueConfig";
 import RoundRobinConfig from "./RoundRobinConfig";
 
 type Props = {
@@ -23,7 +25,7 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
         return <div className="text-sm text-slate-500">No category selected or categories are empty.</div>;
     }
 
-    const onRRChange = (patch: Partial<MatchFormat>) => updateFormatMeta(activeCategory.id, patch);
+    const onFormatChange = (patch: Partial<MatchFormat>) => updateFormatMeta(activeCategory.id, patch);
 
     return (
         <>
@@ -111,7 +113,21 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
 
             {activeSelection.type === "rr+ko" && (
                 <div className="mt-6">
-                    <RoundRobinConfig activeCategory={activeCategory} activeSelection={activeSelection} onChange={onRRChange} />
+                    <RoundRobinConfig activeCategory={activeCategory} activeSelection={activeSelection} onChange={onFormatChange} />
+                </div>
+            )}
+            {activeSelection.type === "league" && (
+                <div className="mt-6">
+                    <LeagueConfig activeCategory={activeCategory} activeSelection={activeSelection} onChange={onFormatChange} />
+                </div>
+            )}
+            {activeSelection.type === "knockout" && (
+                <div className="mt-6">
+                    <EliminationConfig
+                        activeCategory={activeCategory}
+                        activeSelection={activeSelection}
+                        onChange={(patch) => updateFormatMeta(activeCategory.id, patch)}
+                    />
                 </div>
             )}
         </>
