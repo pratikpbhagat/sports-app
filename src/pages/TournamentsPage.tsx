@@ -61,7 +61,7 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
 
 const categories: Category[] = [
     { id: "singles-men", label: "Singles — Men", registered: 12, capacity: 32 },
-    { id: "singles-women", label: "Singles — Women", registered: 8, capacity: 32 },
+    { id: "singles-women", label: "Singles — Women", registered: 16, capacity: 16 },
     { id: "doubles", label: "Doubles", registered: 6, capacity: 16 },
 ];
 
