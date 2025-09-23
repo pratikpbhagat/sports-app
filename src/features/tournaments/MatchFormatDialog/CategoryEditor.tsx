@@ -9,7 +9,9 @@ import RoundRobinConfig from "./RoundRobinConfig";
 type Props = {
     activeCategory: Category | null;
     activeSelection: MatchFormat | null;
-    updateFormatMeta: (categoryId: string, patch: Partial<MatchFormat>) => void;
+    // NOTE: single-arg updater (applies patch to the CURRENTLY ACTIVE category)
+    updateFormatMeta: (patch: Partial<MatchFormat>) => void;
+    // still allow setting format for any category by id
     setFormatForCategory: (categoryId: string, type: MatchFormatType) => void;
 };
 
@@ -20,12 +22,18 @@ const FORMAT_LABELS: Record<MatchFormatType, string> = {
     custom: "Custom",
 };
 
-export default function CategoryEditor({ activeCategory, activeSelection, updateFormatMeta, setFormatForCategory }: Props) {
+export default function CategoryEditor({
+    activeCategory,
+    activeSelection,
+    updateFormatMeta,
+    setFormatForCategory,
+}: Props) {
     if (!activeCategory || !activeSelection) {
         return <div className="text-sm text-slate-500">No category selected or categories are empty.</div>;
     }
 
-    const onFormatChange = (patch: Partial<MatchFormat>) => updateFormatMeta(activeCategory.id, patch);
+    // local helper uses the single-arg updater the parent provides
+    const onFormatChange = (patch: Partial<MatchFormat>) => updateFormatMeta(patch);
 
     return (
         <>
@@ -43,7 +51,11 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
             <div className="mt-4">
                 <div className="text-sm font-medium mb-2">Choose format</div>
 
-                <RadioGroup value={activeSelection.type} onValueChange={(v) => setFormatForCategory(activeCategory.id, v as MatchFormatType)} className="grid grid-cols-2 gap-2">
+                <RadioGroup
+                    value={activeSelection.type}
+                    onValueChange={(v) => setFormatForCategory(activeCategory.id, v as MatchFormatType)}
+                    className="grid grid-cols-2 gap-2"
+                >
                     {(["rr+ko", "league", "knockout", "custom"] as MatchFormatType[]).map((fmt) => (
                         <label key={fmt} className="flex items-center gap-2 p-2 rounded hover:bg-slate-50 cursor-pointer">
                             <RadioGroupItem value={fmt} />
@@ -72,7 +84,7 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
                         type="number"
                         min={1}
                         value={activeSelection.pointsPerGame ?? 11}
-                        onChange={(e) => updateFormatMeta(activeCategory.id, { pointsPerGame: Number(e.target.value) })}
+                        onChange={(e) => onFormatChange({ pointsPerGame: Number(e.target.value) })}
                         className="w-full rounded border px-2 py-1"
                     />
                 </label>
@@ -83,7 +95,7 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
                         type="number"
                         min={1}
                         value={activeSelection.gamesPerMatch ?? 3}
-                        onChange={(e) => updateFormatMeta(activeCategory.id, { gamesPerMatch: Number(e.target.value) })}
+                        onChange={(e) => onFormatChange({ gamesPerMatch: Number(e.target.value) })}
                         className="w-full rounded border px-2 py-1"
                     />
                 </label>
@@ -94,7 +106,7 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
                         type="number"
                         min={1}
                         value={activeSelection.tieBreakTo ?? ""}
-                        onChange={(e) => updateFormatMeta(activeCategory.id, { tieBreakTo: e.target.value === "" ? null : Number(e.target.value) })}
+                        onChange={(e) => onFormatChange({ tieBreakTo: e.target.value === "" ? null : Number(e.target.value) })}
                         className="w-full rounded border px-2 py-1"
                     />
                 </label>
@@ -105,7 +117,7 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
                     <div className="text-xs text-slate-600">Custom format description</div>
                     <textarea
                         value={activeSelection.description ?? ""}
-                        onChange={(e) => updateFormatMeta(activeCategory.id, { description: e.target.value })}
+                        onChange={(e) => onFormatChange({ description: e.target.value })}
                         className="w-full rounded border px-2 py-1 h-24"
                     />
                 </label>
@@ -123,11 +135,7 @@ export default function CategoryEditor({ activeCategory, activeSelection, update
             )}
             {activeSelection.type === "knockout" && (
                 <div className="mt-6">
-                    <EliminationConfig
-                        activeCategory={activeCategory}
-                        activeSelection={activeSelection}
-                        onChange={(patch) => updateFormatMeta(activeCategory.id, patch)}
-                    />
+                    <EliminationConfig activeCategory={activeCategory} activeSelection={activeSelection} onChange={onFormatChange} />
                 </div>
             )}
         </>
