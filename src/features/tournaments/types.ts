@@ -35,6 +35,13 @@ export type MatchFormat = {
     description?: string | null;   // for custom
     rrPools?: number | null; // for round-robin: number of pools (optional)
     rrQualPerPool?: number | null; // for round-robin: number qualifying per pool (optional)
+    rrFullRound?: boolean | null;
+    rrMaxMatchesPerTeam?: number | null;
+    koBracketSize?: number
+    koAutoBrackets?: boolean
+    koSeedMethod?: "random" | "ranking" | "manual"
+    koSeedCount?: number
+    koAutoFillByes?: boolean
     // other options later (seeding, byes, consolation, etc.)
 };
 
