@@ -9,8 +9,8 @@ import RegisterDialog from "@/features/tournaments/RegisterDialog";
 import TournamentList from "@/features/tournaments/TournamentList";
 import { useMemo, useState } from "react";
 
-import MatchFormatDialog from "@/features/tournaments/MatchFormatDialog/MatchFormatDialog";
-import type { MatchFormat } from "@/features/tournaments/types";
+import CategoryFormatWorkflow from "@/features/tournaments/MatchFormatDialog/CategoryFormatWorkflow";
+import type { Category } from "@/features/tournaments/types";
 import { formatDate } from "@/lib/formatDate";
 import type { Tournament } from "@/types/tournament";
 
@@ -57,6 +57,12 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
         entryFee: 10,
         description: "Casual doubles — beginner friendly.",
     } as any,
+];
+
+const categories: Category[] = [
+    { id: "singles-men", label: "Singles — Men", registered: 12, capacity: 32 },
+    { id: "singles-women", label: "Singles — Women", registered: 8, capacity: 32 },
+    { id: "doubles", label: "Doubles", registered: 6, capacity: 16 },
 ];
 
 export default function TournamentsPage() {
@@ -129,35 +135,10 @@ export default function TournamentsPage() {
 
     // handler to open the dialog for a specific tournament/category
     function handleOpenFormatDialog(tournamentId: string, categoryId?: string) {
+        console.log("Opening format dialog for", formatTarget, categoryId);
         setFormatTarget({ tournamentId, categoryId });
         setFormatOpen(true);
     }
-
-    // onSave callback to persist choice
-    function handleSaveFormat(format: MatchFormat) {
-        if (!formatTarget) return;
-        setTournaments((prev) =>
-            prev.map((t) => {
-                if (t.id !== formatTarget.tournamentId) return t;
-                const makeCategory = (catId?: string) => {
-                    if (!catId) {
-                        // apply as default format (tournament-level) — optional
-                        return t;
-                    }
-                    const categories = (t.categories || []).map((c) => (c.id === catId ? { ...c, matchFormat: format } : c));
-                    return { ...t, categories };
-                };
-
-                if (formatTarget.categoryId) return makeCategory(formatTarget.categoryId);
-                // fallback: attach to tournament as defaultFormat
-                return { ...t, defaultMatchFormat: format };
-            })
-        );
-
-        setFormatOpen(false);
-        setFormatTarget(null);
-    }
-
 
     return (
         <main className="min-h-screen p-6 bg-slate-50">
@@ -310,25 +291,17 @@ export default function TournamentsPage() {
                 onUpdate={handleUpdateTournament}
             />
 
-            <MatchFormatDialog
+            <CategoryFormatWorkflow
                 open={formatOpen}
                 onOpenChange={(v) => {
                     setFormatOpen(v);
                     if (!v) setFormatTarget(null);
                 }}
-                initial={
-                    // find existing format if category-specific else use tournament default
-                    (() => {
-                        if (!formatTarget) return null;
-                        const t = tournaments.find((x) => x.id === formatTarget.tournamentId);
-                        if (!t) return null;
-                        if (formatTarget.categoryId) {
-                            return t.categories?.find((c) => c.id === formatTarget.categoryId)?.matchFormat ?? null;
-                        }
-                        return (t as any).defaultMatchFormat ?? null;
-                    })()
-                }
-                onSave={handleSaveFormat}
+                categories={categories}
+                onSave={(selections) => {
+                    // persist selections to backend
+                    console.log("formats saved:", selections);
+                }}
             />
         </main>
     );
