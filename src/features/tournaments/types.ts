@@ -11,7 +11,7 @@ export type Category = {
     teamSubcategories?: string[];
     matchFormat?: MatchFormat | null;
     participants?: Participant[];
-    registered: number; // currently registered
+    registered?: number; // currently registered
     capacity?: number | null; // total slots (undefined/null = unlimited)
 };
 

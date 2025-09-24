@@ -1,7 +1,5 @@
-// features/tournaments/MatchFormatPreview.tsx
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { Category, MatchFormat, MatchFormatType } from "../types";
 
@@ -206,10 +204,6 @@ export default function MatchFormatPreview({ open, onOpenChange, category, forma
                             <div className="text-sm">{format.description ?? "No custom description provided."}</div>
                         </div>
                     )}
-
-                    <div className="flex justify-end gap-2 mt-2">
-                        <Button variant="ghost" onClick={() => onOpenChange?.(false)}>Close</Button>
-                    </div>
                 </div>
             </DialogContent>
         </Dialog>
