@@ -162,7 +162,7 @@ export default function HomePage() {
                 <ListCard
                     title="Last Played Tournaments"
                     items={lastPlayed}
-                    viewAllHref="tournaments/history"
+                    viewAllHref="/tournaments/history"
                     accentFrom="#7c3aed"
                     accentTo="#ef4444"
                     renderItem={renderLastPlayed}
