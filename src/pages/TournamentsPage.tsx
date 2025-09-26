@@ -1,17 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Toggle } from "@/components/ui/toggle";
 import CreateTournamentDialog from "@/features/tournaments/CreateTournamentDialog";
-import Filters from "@/features/tournaments/Filters";
 import RegisterDialog from "@/features/tournaments/RegisterDialog";
 import TournamentList from "@/features/tournaments/TournamentList";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-import CategoryFormatWorkflow from "@/features/tournaments/MatchFormatDialog/CategoryFormatWorkflow";
-import type { Category } from "@/features/tournaments/types";
-import { formatDate } from "@/lib/formatDate";
+import TournamentHeader from "@/features/tournaments/TournamentsHeader";
 import type { Tournament } from "@/types/tournament";
 
 const SAMPLE_TOURNAMENTS: Tournament[] = [
@@ -28,8 +22,7 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
         organizer: "Spring Paddle Club",
         entryFee: 15,
         description: "Open singles and doubles, all levels welcome.",
-        // optional fields may be added by create dialog
-    } as any,
+    } as Tournament,
     {
         id: "t2",
         title: "Autumn Classic",
@@ -43,7 +36,7 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
         organizer: "North Racquet Association",
         entryFee: 20,
         description: "Competitive draw, intermediate+.",
-    } as any,
+    } as Tournament,
     {
         id: "t3",
         title: "Weekend Fun Doubles",
@@ -56,13 +49,105 @@ const SAMPLE_TOURNAMENTS: Tournament[] = [
         organizer: "Community Sports",
         entryFee: 10,
         description: "Casual doubles — beginner friendly.",
-    } as any,
-];
-
-const categories: Category[] = [
-    { id: "singles-men", label: "Singles — Men", registered: 12, capacity: 32 },
-    { id: "singles-women", label: "Singles — Women", registered: 16, capacity: 16 },
-    { id: "doubles", label: "Doubles", registered: 6, capacity: 16 },
+    } as Tournament,
+    {
+        id: "t4",
+        title: "Summer Smash",
+        startDate: "2025-08-15",
+        endDate: "2025-08-16",
+        location: "South Park",
+        city: "Springfield",
+        capacity: 32,
+        registered: 10,
+        status: "upcoming",
+        organizer: "Springfield Tennis Club",
+        entryFee: 25,
+        description: "Fun summer tournament with prizes.",
+    } as Tournament,
+    {
+        id: "t5",
+        title: "Downtown Doubles",
+        startDate: "2025-09-15",
+        endDate: "2025-09-16",
+        location: "Downtown Court",
+        city: "Springfield",
+        capacity: 32,
+        registered: 12,
+        status: "upcoming",
+        organizer: "Downtown Sports Club",
+        entryFee: 20,
+        description: "Exciting doubles tournament in the heart of the city.",
+    } as Tournament,
+    {
+        id: "t6",
+        title: "Riverton Open",
+        startDate: "2025-10-10",
+        endDate: "2025-10-11",
+        location: "Riverton Sports Complex",
+        city: "Riverton",
+        capacity: 32,
+        registered: 12,
+        status: "upcoming",
+        organizer: "Riverton Sports Club",
+        entryFee: 20,
+        description: "Exciting singles and doubles tournament.",
+    } as Tournament,
+    {
+        id: "t7",
+        title: "Lakeside Tournament",
+        startDate: "2025-11-15",
+        endDate: "2025-11-16",
+        location: "Lakeside Park",
+        city: "Lakeside",
+        capacity: 32,
+        registered: 12,
+        status: "upcoming",
+        organizer: "Lakeside Sports Club",
+        entryFee: 20,
+        description: "Exciting singles and doubles tournament.",
+    } as Tournament,
+    {
+        id: "t8",
+        title: "Hilltop Championship",
+        startDate: "2025-12-01",
+        endDate: "2025-12-02",
+        location: "Hilltop Stadium",
+        city: "Hilltop",
+        capacity: 32,
+        registered: 12,
+        status: "upcoming",
+        organizer: "Hilltop Sports Club",
+        entryFee: 20,
+        description: "Exciting singles and doubles tournament.",
+    } as Tournament,
+    {
+        id: "t9",
+        title: "Valley Invitational",
+        startDate: "2025-12-10",
+        endDate: "2025-12-11",
+        location: "Valley Arena",
+        city: "Valley",
+        capacity: 32,
+        registered: 12,
+        status: "upcoming",
+        organizer: "Valley Sports Club",
+        entryFee: 20,
+        description: "Exciting singles and doubles tournament.",
+    } as Tournament,
+    {
+        id: "t10",
+        title: "Mountain Open",
+        startDate: "2026-01-05",
+        endDate: "2026-01-06",
+        location: "Mountain Court",
+        city: "Mountain",
+        capacity: 32,
+        registered: 12,
+        status: "upcoming",
+        organizer: "Mountain Sports Club",
+        entryFee: 20,
+        description: "Exciting singles and doubles tournament.",
+    } as Tournament
 ];
 
 export default function TournamentsPage() {
@@ -70,6 +155,8 @@ export default function TournamentsPage() {
     const [query, setQuery] = useState("");
     const [filterStatus, setFilterStatus] = useState<"all" | "upcoming" | "ongoing" | "completed">("all");
     const [selectedCity, setSelectedCity] = useState<string | "all">("all");
+
+    const [filteredTournaments, setFilteredTournaments] = useState<Tournament[]>(tournaments);
 
     // register modal state
     const [registerOpen, setRegisterOpen] = useState(false);
@@ -84,18 +171,6 @@ export default function TournamentsPage() {
 
     // toggle between Player and Organizer view (false = Player, true = Organizer)
     const [isOrganizerView, setIsOrganizerView] = useState(false);
-
-    const cities = useMemo(() => Array.from(new Set(tournaments.map((t) => t.city).filter(Boolean) as string[])), [tournaments]);
-
-    const filtered = useMemo(() => {
-        return tournaments.filter((t) => {
-            if (filterStatus !== "all" && t.status !== filterStatus) return false;
-            if (selectedCity !== "all" && t.city !== selectedCity) return false;
-            if (!query) return true;
-            const q = query.toLowerCase();
-            return [t.title, t.location, t.organizer, t.city, t.description].some((v) => (v ?? "").toLowerCase().includes(q));
-        });
-    }, [tournaments, query, filterStatus, selectedCity]);
 
     // handlers
     function handleOpenRegister(t: Tournament) {
@@ -129,145 +204,30 @@ export default function TournamentsPage() {
         if (isOrganizerView) setCreateOpen(true);
     };
 
-    // inside TournamentsPage component (top-level state)
-    const [formatOpen, setFormatOpen] = useState(false);
-    const [formatTarget, setFormatTarget] = useState<{ tournamentId: string; categoryId?: string } | null>(null);
-
-    // handler to open the dialog for a specific tournament/category
-    function handleOpenFormatDialog(tournamentId: string, categoryId?: string) {
-        console.log("Opening format dialog for", formatTarget, categoryId);
-        setFormatTarget({ tournamentId, categoryId });
-        setFormatOpen(true);
-    }
-
     return (
         <main className="min-h-screen p-6 bg-slate-50">
-            <header className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div>
-                    <h1 className="text-2xl font-bold text-[#0f172a]">Tournaments</h1>
-                    <p className="text-sm text-slate-500">Browse and register for nearby tournaments — or create one if you're organizing.</p>
-                </div>
+            <TournamentHeader
+                isOrganizerView={isOrganizerView}
+                setIsOrganizerView={setIsOrganizerView}
+                query={query}
+                setQuery={setQuery}
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
+                selectedCity={selectedCity}
+                setSelectedCity={setSelectedCity}
+                tournaments={tournaments}
+                onOpenCreate={handleOpenCreateGuarded}
+                onFiltered={(f) => setFilteredTournaments(f)}
+            />
 
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-3">
-                        <div className="text-sm text-slate-400">View</div>
-
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs text-slate-500">Player</span>
-
-                            <Toggle
-                                pressed={isOrganizerView}
-                                onPressedChange={(val) => setIsOrganizerView(Boolean(val))}
-                                aria-label="Toggle organizer view"
-                            />
-
-                            <span className="text-xs text-slate-500">Organizer</span>
-                        </div>
-                    </div>
-
-                    <Filters
-                        query={query}
-                        setQuery={setQuery}
-                        filterStatus={filterStatus}
-                        setFilterStatus={setFilterStatus}
-                        selectedCity={selectedCity}
-                        setSelectedCity={setSelectedCity}
-                        cities={cities}
-                        onOpenCreate={handleOpenCreateGuarded}
-                    />
-                </div>
-            </header>
-
-            <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-4">
-                    {/* pass isOrganizerView so TournamentCard shows the correct actions */}
-                    <TournamentList
-                        title="Nearby & upcoming"
-                        tournaments={filtered}
-                        onRegister={handleOpenRegister}
-                        isOrganizerView={isOrganizerView}
-                        onEdit={handleOpenEdit}
-                    />
-
-                    <Card className="shadow-lg border-0">
-                        <CardHeader className="px-6 py-4">
-                            <CardTitle className="text-lg font-semibold text-[#0f172a]">All tournaments</CardTitle>
-                        </CardHeader>
-
-                        <CardContent className="p-0">
-                            <div className="w-full overflow-auto">
-                                <table className="w-full table-auto text-sm">
-                                    <thead className="bg-white">
-                                        <tr>
-                                            <th className="text-left px-4 py-3">Title</th>
-                                            <th className="text-left px-4 py-3">Dates</th>
-                                            <th className="text-left px-4 py-3">Location</th>
-                                            <th className="text-left px-4 py-3">Registered</th>
-                                            <th className="text-left px-4 py-3">Actions</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody className="bg-slate-50">
-                                        {tournaments.map((t) => (
-                                            <tr key={t.id} className="border-t">
-                                                <td className="px-4 py-3">{t.title}</td>
-                                                <td className="px-4 py-3">
-                                                    {formatDate(t.startDate)}
-                                                    {t.endDate ? ` — ${formatDate(t.endDate)}` : ""}
-                                                </td>
-                                                <td className="px-4 py-3">{t.location}{t.city ? `, ${t.city}` : ""}</td>
-                                                <td className="px-4 py-3">{t.registered}/{t.capacity ?? "—"}</td>
-                                                <td className="px-4 py-3">
-                                                    <div className="flex items-center gap-2">
-                                                        {!isOrganizerView ? (
-                                                            <Button size="sm" onClick={() => handleOpenRegister(t)}>Register</Button>
-                                                        ) : (
-                                                            <>
-                                                                <Button variant="ghost" size="sm" onClick={() => handleOpenEdit(t)}>Manage</Button>
-                                                                <Button size="sm" onClick={() => handleOpenFormatDialog(t.id)} >Format</Button>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <aside className="space-y-4">
-                    <Card className="shadow-lg border-0">
-                        <CardHeader className="px-6 py-4">
-                            <CardTitle className="text-lg font-semibold text-[#0f172a]">Quick stats</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-4 space-y-3">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <div className="text-xs text-slate-500">Total tournaments</div>
-                                    <div className="text-xl font-bold text-[#0f172a]">{tournaments.length}</div>
-                                </div>
-                                <div>
-                                    <div className="text-xs text-slate-500">Upcoming</div>
-                                    <div className="text-xl font-bold text-[#22c55e]">{tournaments.filter((t) => t.status === "upcoming").length}</div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="shadow-lg border-0">
-                        <CardHeader className="px-6 py-4">
-                            <CardTitle className="text-lg font-semibold text-[#0f172a]">Featured</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-4">
-                            <div className="text-sm text-slate-600">
-                                Highlight your featured tournaments here — maybe those with sponsor logos or current leaderboards.
-                            </div>
-                        </CardContent>
-                    </Card>
-                </aside>
+            <section className="space-y-4">
+                <TournamentList
+                    title={isOrganizerView ? "My Tournaments" : "Nearby & upcoming"}
+                    tournaments={filteredTournaments}
+                    onRegister={handleOpenRegister}
+                    isOrganizerView={isOrganizerView}
+                    onEdit={handleOpenEdit}
+                />
             </section>
 
             <RegisterDialog
@@ -277,31 +237,24 @@ export default function TournamentsPage() {
                 onConfirm={handleConfirmRegistration}
             />
 
-            {/* Create dialog (for organizers) */}
-            <CreateTournamentDialog open={createOpen} setOpen={setCreateOpen} onCreate={handleCreateTournament} />
-
-            {/* Edit dialog reuses the same component and passes initialData + onUpdate */}
             <CreateTournamentDialog
-                open={editOpen}
+                open={createOpen || editOpen}
                 setOpen={(v) => {
-                    setEditOpen(v);
-                    if (!v) setEditTournament(null);
+                    if (!v) {
+                        setCreateOpen(false);
+                        setEditOpen(false);
+                        setEditTournament(null);
+                    } else {
+                        if (editTournament) {
+                            setEditOpen(true);
+                        } else {
+                            setCreateOpen(true);
+                        }
+                    }
                 }}
                 initialData={editTournament}
+                onCreate={handleCreateTournament}
                 onUpdate={handleUpdateTournament}
-            />
-
-            <CategoryFormatWorkflow
-                open={formatOpen}
-                onOpenChange={(v) => {
-                    setFormatOpen(v);
-                    if (!v) setFormatTarget(null);
-                }}
-                categories={categories}
-                onSave={(selections) => {
-                    // persist selections to backend
-                    console.log("formats saved:", selections);
-                }}
             />
         </main>
     );
