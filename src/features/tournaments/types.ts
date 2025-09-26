@@ -1,3 +1,5 @@
+import type { Tournament } from "@/types/tournament";
+
 export type CategoryOptionKind = "singles" | "doubles" | "mixed" | "split" | "open" | "team" | "custom";
 
 export type Category = {
@@ -61,4 +63,33 @@ export interface Matchup {
     notes?: string | null;
     status?: "scheduled" | "completed" | "pending";
 }
+
+// minimal types for registrations — adapt to your app types
+export type RegistrationStatus = "pending" | "approved" | "rejected" | "on_hold";
+
+export type RegistrationApplication = {
+    id: string;
+    participantName: string;
+    duprId?: string | null;
+    email?: string | null;
+    categoryId: string;
+    categoryLabel?: string | null;
+    submittedAt?: string; // ISO date
+    status?: RegistrationStatus;
+    adminComment?: string | null;
+};
+
+export type TournamentFilterProps = {
+    tournaments: Tournament[];
+    isOrganizerView?: boolean;
+    setIsOrganizerView?: (val: boolean) => void;
+    query: string;
+    setQuery: (q: string) => void;
+    filterStatus: "all" | "upcoming" | "ongoing" | "completed";
+    setFilterStatus: (status: "all" | "upcoming" | "ongoing" | "completed") => void;
+    selectedCity: string | "all";
+    setSelectedCity: (city: string | "all") => void;
+    onOpenCreate?: () => void;
+    onFiltered?: (filtered: Tournament[]) => void; // new callback
+};
 
