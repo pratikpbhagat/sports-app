@@ -1,5 +1,5 @@
+import AppLogo from "@/assets/playoffe_app_only_logo.svg?react";
 import { Calendar, Home, Search } from "lucide-react";
-import AppLogo from "@/assets/grynd-app-logo.svg?react";
 
 import {
     Sidebar,
@@ -11,6 +11,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { MenuItems } from "@/config/MenuItems";
+import { Link } from "react-router-dom";
 
 // map menu titles to icons (adjust/add icons as you like)
 const iconMap: Record<string, any> = {
@@ -22,18 +23,20 @@ const iconMap: Record<string, any> = {
 export default function AppSidebar() {
     const items = MenuItems();
 
-    // Active route detection:
-    // - Next.js: replace with `const pathname = usePathname()` from 'next/navigation'
-    // - React Router: replace with `const { pathname } = useLocation()`
-    // Server-safe fallback (during SSR) returns empty string.
     const pathname = typeof window !== "undefined" ? window.location.pathname : "";
 
     return (
         <Sidebar>
             <SidebarContent className="bg-[#0f172a] text-white">
-                {/* Logo row — reduced padding and constrained height */}
-                <div className="w-full px-3 py-2 flex items-center">
-                    <AppLogo className="w-full h-auto" />
+                <div className="flex items-center gap-5 px-4 py-3">
+                    <Link to="/" className="inline-flex items-center">
+                        <AppLogo className="h-15 w-auto" />
+                    </Link>
+
+                    <div className="hidden md:block">
+                        <div className="text-2xl font-semibold text-slate-500">PLAYOFFE</div>
+                        <div className="text-xs text-slate-500">Trainings & Tournaments</div>
+                    </div>
                 </div>
 
                 <SidebarGroup>
