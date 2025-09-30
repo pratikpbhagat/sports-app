@@ -1,50 +1,52 @@
-import * as SwitchPrimitive from "@radix-ui/react-switch"
-import * as React from "react"
+"use client";
 
-import { cn } from "@/lib/utils"
+import * as SwitchPrimitive from "@radix-ui/react-switch";
+import * as React from "react";
 
-/**
- * Custom Switch that uses the requested colors:
- * - checked track:  #22c55e (green)
- * - unchecked track: #0f172a (dark)
- *
- * The component keeps the same API as Radix's Switch root so it can be used
- * as a drop-in replacement for the previous shadcn-style Switch.
- */
-function Switch({
-  className,
-  ...props
-}: React.ComponentProps<typeof SwitchPrimitive.Root>) {
+import { cn } from "@/lib/utils";
+
+type RadixProps = React.ComponentProps<typeof SwitchPrimitive.Root>;
+
+function Switch({ className, checked, ...props }: RadixProps) {
+  // If the component is used as a controlled component (checked !== undefined)
+  // we set an inline backgroundColor to avoid Tailwind purge issues and ensure
+  // the exact hex colors are used.
+  const inlineTrackStyle =
+    typeof checked === "boolean"
+      ? { backgroundColor: checked ? "#22c55e" : "#7c3aed" }
+      : undefined;
+
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
+      // apply inline style only when controlled, otherwise fall back to Tailwind/data-attrs
+      style={inlineTrackStyle}
       className={cn(
-        // base track styles + explicit checked/unchecked colors
-        // we use Tailwind arbitrary colors (bracket notation) for the exact hex values
-        "peer inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none",
-        // unchecked (default) track
-        "data-[state=unchecked]:bg-[#0f172a]",
-        // checked track
+        // base track
+        "peer inline-flex h-[1.4rem] w-9 shrink-0 items-center rounded-full transition-all outline-none",
+        "w-12 px-1",
+        "data-[state=unchecked]:bg-[#7c3aed]",
         "data-[state=checked]:bg-[#22c55e]",
-        // focus ring (slightly translucent green)
-        "focus-visible:ring-2 focus-visible:ring-[#22c55e]/30",
-        // disabled behavior
+        "focus-visible:ring-2 focus-visible:ring-[#7c3aed]",
         "disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
+      // keep checked prop passed through for controlled usage
+      checked={checked}
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(
-          // thumb is white for best contrast against both tracks
+          // thumb styling: white with small border to pop on either track
           "block h-4 w-4 rounded-full bg-white shadow transform transition-transform",
-          // slide to right when checked
-          "data-[state=checked]:translate-x-[calc(100%-0.25rem)] data-[state=unchecked]:translate-x-0"
+          // translate to the right when checked. We calculated travel distance = 20px
+          "data-[state=unchecked]:translate-x-0 data-[state=checked]:translate-x-[20px]"
         )}
       />
     </SwitchPrimitive.Root>
-  )
+  );
 }
 
-export { Switch }
+export { Switch };
+

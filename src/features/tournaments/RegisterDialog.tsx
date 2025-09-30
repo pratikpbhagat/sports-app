@@ -1,9 +1,9 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import type { Tournament } from "@/types/tournament";
+import type { FormEvent } from "react";
+import { useState } from "react";
 
 
 export default function RegisterDialog({
@@ -46,22 +46,19 @@ export default function RegisterDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-
                 <form onSubmit={handleSubmit} className="mt-4 space-y-3">
                     <label className="block">
                         <span className="text-xs text-slate-600">Full name</span>
                         <Input value={name} onChange={(e) => setName(e.target.value)} required />
                     </label>
 
-
                     <label className="block">
                         <span className="text-xs text-slate-600">Email (optional)</span>
                         <Input value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
                     </label>
 
-
                     <div className="flex justify-end gap-2 mt-3">
-                        <Button variant="ghost" onClick={handleClose} type="button">
+                        <Button variant="destructive" onClick={handleClose} type="button">
                             Cancel
                         </Button>
                         <Button type="submit">Confirm registration</Button>

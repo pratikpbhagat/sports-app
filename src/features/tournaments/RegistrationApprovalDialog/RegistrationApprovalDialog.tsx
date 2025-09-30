@@ -1,5 +1,6 @@
 "use client";
 
+import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -118,8 +119,8 @@ export default function RegistrationApprovalDialog({
 
                         <div className="flex items-center gap-2">
                             <div className="text-xs text-slate-500">Selected: <strong>{selectedIds.size}</strong></div>
-                            <Button variant="ghost" size="sm" onClick={selectAllOnPage}>Select all</Button>
-                            <Button variant="ghost" size="sm" onClick={clearSelection}>Clear</Button>
+                            <Button variant="outline" size="sm" onClick={selectAllOnPage}>Select all</Button>
+                            <Button variant="destructive" size="sm" onClick={clearSelection}>Clear</Button>
                         </div>
                     </div>
 
@@ -201,11 +202,16 @@ export default function RegistrationApprovalDialog({
                                             <td className="px-3 py-2">
                                                 <div className="flex flex-col gap-2">
                                                     <div className="flex gap-2">
-                                                        <Button size="sm" onClick={() => handleStatusChange(a.id, "approved")}>Approve</Button>
-                                                        <Button size="sm" variant="secondary" onClick={() => handleStatusChange(a.id, "rejected")}>Reject</Button>
-                                                        <Button size="sm" variant="outline" onClick={() => handleStatusChange(a.id, "on_hold")}>Hold</Button>
+                                                        <Button size="sm" onClick={() => handleStatusChange(a.id, "approved")}>
+                                                            <IconCheck className="inline w-4 h-4 mr-1" />
+                                                        </Button>
+                                                        <Button size="sm" variant="secondary" onClick={() => handleStatusChange(a.id, "rejected")}>
+                                                            <IconX className="inline w-4 h-4 mr-1" />
+                                                        </Button>
+                                                        <Button size="sm" variant="outline" onClick={() => handleStatusChange(a.id, "on_hold")}>
+                                                            <Pause className="inline w-4 h-4 mr-1" />
+                                                        </Button>
                                                     </div>
-
                                                     <div className="text-xs text-slate-400">Current: <strong className="capitalize">{a.status ?? "pending"}</strong></div>
                                                 </div>
                                             </td>
@@ -217,22 +223,10 @@ export default function RegistrationApprovalDialog({
                     </div>
 
                     <div className="flex justify-end gap-2">
-                        <Button variant="ghost" onClick={() => onOpenChange?.(false)}>Close</Button>
+                        <Button variant="destructive" onClick={() => onOpenChange?.(false)}>Close</Button>
                     </div>
                 </div>
             </DialogContent>
         </Dialog>
     );
-}
-
-/** Small helper component to render status badge */
-function StatusBadge({ status }: { status: RegistrationStatus }) {
-    const map: Record<RegistrationStatus, { label: string; className?: string }> = {
-        pending: { label: "Pending", className: "bg-yellow-100 text-yellow-800" },
-        approved: { label: "Approved", className: "bg-green-100 text-green-800" },
-        rejected: { label: "Rejected", className: "bg-red-100 text-red-800" },
-        on_hold: { label: "On hold", className: "bg-slate-100 text-slate-800" },
-    };
-    const info = map[status];
-    return <div className={`inline-block px-2 py-1 text-xs rounded ${info.className}`}>{info.label}</div>;
 }

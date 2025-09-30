@@ -42,20 +42,30 @@
 
 }
 
+/* index.css (scoped theme variables) */
+.app-root {
+  --app-text: #213547;
+  --app-bg: #ffffff;
+  --app-link-hover: #747bff;
+  --app-btn-bg: #f9f9f9; /* only used by .app-btn if you want an app-specific plain button */
+}
+
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  .app-root {
+    color: var(--app-text);
+    background-color: var(--app-bg);
   }
 
-  a:hover {
-    color: #747bff;
+  .app-root a:hover {
+    color: var(--app-link-hover);
   }
 
-  button {
-    background-color: #f9f9f9;
+  /* If you need a simple "app style" plain button, target a class instead of all buttons */
+  .app-root .app-btn {
+    background-color: var(--app-btn-bg);
   }
 }
+
 
 .dark {
   --color-sidebar: #071023;

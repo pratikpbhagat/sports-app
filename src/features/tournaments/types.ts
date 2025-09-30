@@ -67,6 +67,8 @@ export interface Matchup {
 // minimal types for registrations — adapt to your app types
 export type RegistrationStatus = "pending" | "approved" | "rejected" | "on_hold";
 
+export type TournamentStatus = "upcoming" | "ongoing" | "completed";
+
 export type RegistrationApplication = {
     id: string;
     participantName: string;

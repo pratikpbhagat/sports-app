@@ -160,7 +160,7 @@ export default function TournamentList({
                                         <Button
                                             key={p}
                                             size="sm"
-                                            variant={p === page ? "default" : "ghost"}
+                                            variant="ghost"
                                             onClick={() => goTo(p)}
                                             aria-current={p === page ? "page" : undefined}
                                             className={p === page ? "bg-[#7c3aed]/10 text-[#7c3aed] font-medium" : ""}

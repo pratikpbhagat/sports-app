@@ -170,7 +170,7 @@ export default function CategoryFormatWorkflow({
                             />
 
                             <div className="mt-6 flex items-center justify-end gap-2">
-                                <Button variant="ghost" onClick={handleClose}>
+                                <Button variant="destructive" onClick={handleClose}>
                                     Cancel
                                 </Button>
 
