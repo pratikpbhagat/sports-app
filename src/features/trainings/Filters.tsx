@@ -15,6 +15,7 @@ type Props = {
 };
 
 export default function Filters({ query, setQuery, selectedCity, setSelectedCity, cities, onOpenCreate }: Props) {
+    console.log(selectedCity)
     return (
         <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 bg-white rounded-md shadow px-3 py-1">

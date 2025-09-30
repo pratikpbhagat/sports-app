@@ -1,3 +1,5 @@
+import type { Category, TournamentStatus } from "@/features/tournaments/types";
+
 export type Tournament = {
     id: string;
     title: string;
@@ -7,8 +9,9 @@ export type Tournament = {
     city?: string;
     capacity?: number;
     registered?: number;
-    status?: "upcoming" | "ongoing" | "completed";
+    status?: TournamentStatus
     organizer?: string;
     entryFee?: number;
     description?: string;
+    categories?: Category[];
 };
