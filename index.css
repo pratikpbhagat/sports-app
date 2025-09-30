@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --color-sidebar: #ffffff;
+  --color-sidebar-foreground: #0f172a;
+  /* Dark Slate */
+  --color-sidebar-accent: #f6f9fb;
+  /* subtle surface */
+  --color-sidebar-accent-foreground: #0f172a;
+  --color-sidebar-border: rgba(15, 23, 42, 0.06);
+  --color-sidebar-ring: rgba(124, 58, 237, 0.12);
+  /* subtle purple ring */
+}
+
+@layer base {
+  :root {
+    --font-sans: "Source Sans Pro", sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+}
+
+/* index.css (scoped theme variables) */
+.app-root {
+  --app-text: #213547;
+  --app-bg: #ffffff;
+  --app-link-hover: #747bff;
+  --app-btn-bg: #f9f9f9; /* only used by .app-btn if you want an app-specific plain button */
+}
+
+@media (prefers-color-scheme: light) {
+  .app-root {
+    color: var(--app-text);
+    background-color: var(--app-bg);
+  }
+
+  .app-root a:hover {
+    color: var(--app-link-hover);
+  }
+
+  /* If you need a simple "app style" plain button, target a class instead of all buttons */
+  .app-root .app-btn {
+    background-color: var(--app-btn-bg);
+  }
+}
+
+
+.dark {
+  --color-sidebar: #071023;
+  /* slightly darker than slate */
+  --color-sidebar-foreground: #e6eef8;
+  /* light text */
+  --color-sidebar-accent: rgba(124, 58, 237, 0.08);
+  /* subtle purple overlay */
+  --color-sidebar-accent-foreground: #ffffff;
+  --color-sidebar-border: rgba(255, 255, 255, 0.06);
+  --color-sidebar-ring: rgba(34, 197, 94, 0.12);
+  /* greenish ring in dark */
+}
+
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+.bg-sidebar {
+  background-color: var(--color-sidebar);
+}
+
+.text-sidebar-foreground {
+  color: var(--color-sidebar-foreground);
+}
+
+.bg-sidebar-accent {
+  background-color: var(--color-sidebar-accent);
+}
+
+.border-sidebar-border {
+  border-color: var(--color-sidebar-border);
+}
+
+@layer base {}
